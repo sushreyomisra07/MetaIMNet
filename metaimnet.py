@@ -275,7 +275,7 @@ def train_metaimnet_model(x_train_scaled,
 
         print("Epoch %d: Training BCE Loss %.4f, Validation BCE Loss %.4f" % (i+1, err_train, err_val))
         
-    return model1, model2
+    return model1, model2, error_evolution_training, error_evolution_val
 
 
 ###################################################################################
