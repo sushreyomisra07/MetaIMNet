@@ -18,5 +18,6 @@ IMPORTANT NOTE ABOUT REQUIRED INPUT TIME HISTORIES
 
 ##################################################
 
-For running the Meta-IMNet models, the full time histories are required. The time histories are stacked into a 2D tensor in pytorch, with each row representing a unique time history. Since the tensor structure requires all rows to have the same length, all time histories shorter than the longest time history are padded with zeros at the end. This input file is a large 3.72 GB file, and it cannot be loaded into GitHub. As a result, the time histories were copied into a DropBox folder and the link is provided here: 
+For running the Meta-IMNet models, the full time histories are required. The time histories are stacked into a 2D tensor in pytorch, with each row representing a unique time history. Since the tensor structure requires all rows to have the same length, all time histories shorter than the longest time history are padded with zeros at the end. This input file is a large 3.72 GB file, and it cannot be loaded into GitHub. As a result, the time histories were copied into a DropBox folder and the link is provided here: https://www.dropbox.com/scl/fi/86hyuxr59btve1ekwnuey/x_gm?rlkey=f0dgl18b5favyecmrovjmf2ik&st=oafrzb8l&dl=0
+
 Please download the dataset and update the file path in your Notebook to incorporate it (you may need to update other file paths as well).
