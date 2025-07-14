@@ -24,22 +24,23 @@ class FCN(nn.Module):
         super().__init__()
         # activation = nn.Tanh
         # activation = nn.ReLU
-        # activation = nn.ELU
-        # activation = nn.LeakyReLU
-        activation = nn.Sigmoid
+        activation1 = nn.ELU
+        # activation1 = nn.LeakyReLU
+        # activation1 = nn.Sigmoid
+        activation2 = nn.Sigmoid
         # activation = nn.Softplus
         
         self.fcs = nn.Sequential(*[
                         nn.Linear(N_INPUT, N_HIDDEN),
-                        activation()])
+                        activation1()])
         self.fch = nn.Sequential(*[
                         nn.Sequential(*[
                             nn.Linear(N_HIDDEN, N_HIDDEN),
-                            activation()]) for _ in range(N_LAYERS-1)])
+                            activation1()]) for _ in range(N_LAYERS-1)])
         self.fce = nn.Linear(N_HIDDEN, N_OUTPUT)
         self.fce = nn.Sequential(*[
                         nn.Linear(N_HIDDEN, N_OUTPUT),
-                        activation()])
+                        activation2()])
         
     def forward(self, x):
         x = self.fcs(x)
@@ -123,15 +124,21 @@ def train_tradnet_model(x_data,
                         train_data, 
                         val_data,
                         max_epochs = 2000,
-                        interval = 10):
+                        automate_stopping = True,
+                        interval = 10,
+                        alpha = 1e-3,
+                        nlayers = 3,
+                        nhidden = 24,
+                        verbose = True,
+):
     
     # NN parameters
     n_input_nn = x_data.shape[1]
     n_output = y_data.shape[1]
     
     # train standard neural network to fit training data
-    model = FCN(n_input_nn, n_output, 24, 3)
-    alpha = 1e-3
+    model = FCN(n_input_nn, n_output, nhidden, nlayers)
+    # alpha = 1e-3
 
     optimizer = torch.optim.Adam(model.parameters(), lr=alpha)
 
@@ -155,10 +162,6 @@ def train_tradnet_model(x_data,
 
         optimizer.step()
 
-        # plot the result as training progresses
-        if ((i+1) % interval != 0) and (i!=0):
-            continue
-
         model.eval()
         with torch.no_grad():
             y_pred_val = predict_tradnet(model, x_val)
@@ -171,8 +174,18 @@ def train_tradnet_model(x_data,
             error_evolution_training.append(float(err_train))
             error_evolution_val.append(float(err_val))
 
-        print("Epoch %d: Training BCE Loss %.4f, Validation BCE Loss %.4f" % (i+1, err_train, err_val))
+        if verbose:
+            if ((i+1) % interval == 0) or (i==0):
+                print("Epoch %d: Training BCE Loss %.4f, Validation BCE Loss %.4f" % (i+1, err_train, err_val))
         
+        if automate_stopping & (i > 200):
+            err_window = error_evolution_val[-10:]
+            err_diff = np.diff(err_window)
+            global_diff = error_evolution_val[i] - error_evolution_val[i-10]
+            if np.all(err_diff>0) or (global_diff > 0.04*err_val):
+                print("Epoch %d: Final Training BCE Loss %.4f, Final Validation BCE Loss %.4f" % (i+1, err_train, err_val))
+                break
+    
     return model, error_evolution_training, error_evolution_val
 
 
@@ -215,7 +228,7 @@ def plot_auc_roc(data, true_label, pred_label):
     plt.xlabel('False Positive Rate', fontsize = 16)
     plt.ylabel('True Positive Rate', fontsize = 16)
     auc_roc = roc_auc_score(np.array(data[true_label]), np.array(data[pred_label]))
-    plt.title('ROC Curve, AUC_ROC = {}'.format(auc_roc.round(3)), fontsize = 16)
+    plt.title('ROC Curve, AUC_ROC = {}'.format(round(auc_roc, 3), fontsize = 16))
     plt.grid()
 
 

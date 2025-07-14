@@ -301,19 +301,19 @@ def predict_metaimnet(model1,
 def plot_scatter_results(data, title_text):
     fig, ax = plt.subplots(1,1, figsize = (5, 5))
 
-    x_truth = np.arange(0, 0.5+data['tip_displacement'].max(), 0.5)
+    x_truth = np.arange(0, 0.5+data['drift_ratio_pct_max'].max(), 0.5)
     y_truth = x_truth
 
-    ax.scatter(data['tip_displacement'], data['tip_displacement_pred'], label = 'Trained Model')
+    ax.scatter(data['drift_ratio_pct_max'], data['drift_ratio_pred'], label = 'Trained Model')
     ax.plot(x_truth, y_truth, color = 'r', label = 'Perfect Model')
 
-    error = ((data['tip_displacement_pred']-data['tip_displacement'])**2).mean()
-    r2 = r2_score(data['tip_displacement'], data['tip_displacement_pred'])
+    error = ((data['drift_ratio_pred']-data['drift_ratio_pct_max'])**2).mean()
+    r2 = r2_score(data['drift_ratio_pct_max'], data['drift_ratio_pred'])
     error = error**0.5
 
     ax.legend()
-    ax.set_xlabel('Ground Truth Tip Disp (in)', fontsize = 18)
-    ax.set_ylabel('Predicted Tip Disp (in)', fontsize = 18)
+    ax.set_xlabel('Ground Peak Inter-storey Drift Ratio (%)', fontsize = 12)
+    ax.set_ylabel('Predicted Peak Inter-storey Drift Ratio (%)', fontsize = 12)
     ax.set_title(title_text, fontsize = 18)
     
     ax.grid()
@@ -321,5 +321,6 @@ def plot_scatter_results(data, title_text):
     plt.show()
     
     print('RMSE = {}, R2 = {}'.format(round(error, 3), round(r2, 3)))
+
 
 
