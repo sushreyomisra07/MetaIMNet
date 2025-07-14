@@ -3,14 +3,16 @@ Codes and Input Datasets required to train and test MetaIMNet surrogate models a
 The codes are in python and the demonstrations are provided in the form of Jupyter Notebooks. It uses "pytorch" and "sklearn" libraries for the machine learning tasks.
 
 The Jupyter Notebooks are annotated as follows. 
-  * TradNet_classification_train.ipynb: Train the TradNet classification model and check model performance
-  * TradNet_regression_train.ipynb: Train the TradNet regression model and check model performance
-  * MetaIMNet_classification_train.ipynb: Train the MetaIMNet classification model and check model performance
-  * MetaIMNet_regression_train.ipynb: Train the MetaIMNet regression model and check model performance
+  * TradNet_drift_classification.ipynb: Train the TradNet classification model and check model performance
+  * TradNet_drift_regression.ipynb: Train the TradNet regression model and check model performance
+  * TradNet-AED_drift_classification.ipynb: Train the TradNet-AED classification model and check model performance
+  * TradNet-AED_drift_regression.ipynb: Train the TradNet-AED regression model and check model performance
+  * MetaIMNet_drift_classification.ipynb: Train the MetaIMNet classification model and check model performance
+  * MetaIMNet_drift_regression.ipynb: Train the MetaIMNet regression model and check model performance
 
 The input python codes for gathering the data and features, preprocessing, training the model, and postporcessing the outputs are provided in the form of four python scripts, each of which corresponds to one of the above Jupyter Notebooks.
 
-The structural and some of the ground motion features which are required inputs are stored in a parquet file titled 'predictors.parquet'. The computed ground motion features referenced by a unique ground motion id contained in 'predictors.parquet' are provided in a separate parquet file called 'pga_all_new.parquet'.
+The structural and some of the ground motion features which are required inputs are stored in a parquet file titled 'predictors.parquet'. The computed ground motion features referenced by a unique ground motion id contained in 'predictors_new.parquet' are provided in a separate parquet file called 'pga_all_new.parquet'.
 
 ##################################################
 
